@@ -1,0 +1,43 @@
+# Données locales (gros fichiers, auto-téléchargés au premier lancement)
+data/catnat.csv
+data/departements_100m.geojson
+data/*.csv
+data/*.geojson
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environnements virtuels
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Streamlit
+.streamlit/secrets.toml
+
+# ZIP de rendu (versionné séparément)
+StApp26_*.zip
+
+# 
+./STORYBOARD.md
+./SCRIPT_VIDEO.md
