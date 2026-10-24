@@ -1,139 +1,153 @@
-# Storyboard — CatNat France Dashboard
-## EFREI Paris — Data Storytelling 2026 — Groupe DAI
+# Storyboard: CatNat France Dashboard
 
-> **Question centrale :** Quelles communes et quels territoires sont les plus exposés aux arrêtés de catastrophe naturelle — et est-ce que cela s'aggrave ?
-> **Audience :** Citoyen et élu local
+**EFREI Paris, Data Storytelling 2026, Group DAI**
+Author: Abdel MAMA
 
----
+> **Central question:** Which communes and territories are the most exposed to natural disaster decrees, and is it getting worse?
+>
+> **Audience:** Citizens and local officials who want to understand the historical risk of their territory.
 
-## Section 1 — Introduction (Hook & Contexte)
-
-**Titre-insight :** *« 99 % des communes françaises ont été reconnues en catastrophe naturelle au moins une fois — mais certains territoires accumulent les épisodes »*
-
-**Question à laquelle elle répond :** Pourquoi regarder ces données ? Qu'est-ce qu'un arrêté CatNat ?
-
-**Visuel :** 4 métriques KPI (total arrêtés, communes distinctes, période, famille dominante)
-
-**Filtres actifs :** Aucun (vue globale obligatoire pour le hook)
-
-**KPI :** 260 601 arrêtés / 34 598 communes / 1982–2025 / Inondations
-
-**Texte d'interprétation :**
-La France compte parmi les pays d'Europe les plus touchés par les catastrophes naturelles reconnues. La base GASPAR recense chaque arrêté de reconnaissance — acte administratif qui ouvre le droit à indemnisation. Un arrêté ne correspond pas nécessairement à un événement physique distinct : un même épisode peut générer des milliers d'arrêtés simultanés.
-
-**Avertissements narratifs :**
-- Arrêté ≠ événement physique
-- Périmètre du régime a évolué (tempêtes ~1989, grêle/neige ~2010)
-- Années récentes sous-comptées (délai de reconnaissance croissant)
-- Pas de données de population, de coûts ni de victimes
+**Data:** *Arrêtés de catastrophe naturelle par commune*, data.gouv.fr (GASPAR database, vintage September 2025).
+**Licences:** Open Licence 2.0 (Etalab) for the CatNat dataset; ODbL for administrative boundaries.
+**Narrative arc:** Hook → Context → Key insights → Implications / Next steps.
 
 ---
 
-## Section 2 — Vue d'ensemble
+## Section 1: Introduction (Hook and Context)
 
-**Titre-insight :** *« Les inondations dominent depuis 1982, mais la sécheresse progresse fortement — et les données récentes sont mécaniquement incomplètes »*
+**Insight title:** *"34,598 French communes have been recognised as hit by a natural disaster at least once since 1982, but some territories pile up episodes."*
 
-**Question :** Quelle est la tendance globale ? Quelle famille de risque progresse ?
+**Question answered:** Why look at this data? What is a CatNat decree?
 
-**Visuels (dans l'ordre) :**
-1. Courbe annuelle avec annotations (pics 1999, 2003, 2022) + zone grisée "données incomplètes"
-2. Heatmap année × famille de risque
-3. Petits multiples (6 sous-graphes, 1 par famille)
-4. Barres empilées région × famille (métropole seulement)
+**Visual:** 4 KPI metrics (total decrees, distinct communes, period, dominant risk family).
 
-**Filtres actifs :** Période, Région, Famille — tous actifs
+**Active filters:** None (global view, required for the hook).
 
-**KPI header :** nb arrêtés / communes / risque dominant / département #1
+**KPIs:** 260,601 decrees / 34,598 communes / 1982–2025 / Floods.
 
-**Texte d'interprétation :**
-Le pic de 1999 (~57 000 arrêtés) correspond aux tempêtes Martin & Lothar et aux inondations massives. La sécheresse et le retrait-gonflement des argiles progressent nettement depuis 2000 (pics 2003, 2018, 2022). La zone grisée signale que les années 2023–2025 sont mécaniquement sous-comptées en raison du délai de reconnaissance.
+**Interpretation text:**
+The GASPAR database records every natural disaster recognition decree, an administrative act that opens the right to compensation. A decree does not necessarily match one distinct physical event: a single episode can generate thousands of decrees at once.
 
----
-
-## Section 3 — Analyses approfondies
-
-**Titre-insight :** *« La carte révèle des inégalités territoriales marquées — certains départements cumulent tous les risques »*
-
-**Question :** Où sont les territoires les plus exposés ? Comment le risque évolue-t-il dans le temps et dans l'espace ?
-
-**Sous-sections :**
-
-### A. Carte animée (curseur 1982–2025)
-- Visuel : Choroplèthe animée des départements (métropole + Corse)
-- Toggle : valeur brute / % communes touchées
-- Note : DROM absents de la carte
-
-### B. Classement top/bottom N
-- Visuel : Barres horizontales
-- Onglets : brut / normalisé
-
-### C. Délai de reconnaissance par décennie
-- Visuel : Boîtes à moustaches
-- Message : délai médian 0 j → 185+ j → sous-comptage récent
-
-### D. Saisonnalité
-- Visuel : Barres groupées mois × famille (facet_col=famille)
-- Message : inondations en automne, sécheresse en été
-
-**Filtres actifs :** Tous
+**Narrative warnings:**
+- A decree is not a physical event.
+- The scope of the scheme has changed over time (for example, storms almost disappear from the data after 1989, and hail/snow are absent in 2005–2015).
+- Recent years are undercounted because of the recognition delay.
+- The data has no population, cost or casualty information.
 
 ---
 
-## Section 4 — Par commune
+## Section 2: Overview
 
-**Titre-insight :** *« Chaque commune a son histoire — retrouvez la vôtre »*
+**Insight title:** *"Floods are the largest category overall, but drought is rising strongly, and recent data is mechanically incomplete."*
 
-**Question :** Quel est le risque historique de ma commune ?
+**Question:** What is the overall trend? Which risk family is growing?
 
-**Visuel :**
-1. Recherche full-text (nom ou code INSEE)
-2. Frise chronologique (timeline Plotly)
-3. Barres par famille
-4. Comparaison vs médiane du département
+**Visuals (in order):**
+1. Yearly curve with annotations (peaks in 1999, 2003, 2022) and a grey zone marking incomplete recent years.
+2. Heatmap: year × risk family.
+3. Small multiples: one panel per risk family.
+4. Stacked bars: region × risk family (mainland only).
 
-**Filtres actifs :** Aucun (recherche sur dataset complet)
+**Active filters:** Period, Region, Risk family.
 
-**KPI :** nb arrêtés, famille dominante, rang dans le département, 1ère reconnaissance
+**KPI header:** number of decrees / communes affected / dominant risk / top department.
 
----
-
-## Section 5 — Qualité des données
-
-**Titre-insight :** *« Des données solides sur le fond, mais 8 limites importantes à connaître »*
-
-**Question :** Peut-on faire confiance à ces données ? Quelles précautions prendre ?
-
-**Contenu :**
-- Tableau valeurs manquantes
-- Doublons suspects (31 537 lignes)
-- Incohérences date_arrete < date_fin (8 cas)
-- Délai de reconnaissance par décennie
-- Pics 1999 et 1982–83
-- Changements de périmètre du régime
-- Absence de contexte (population, coûts)
+**Interpretation text:**
+The 1999 peak (about 57,900 rows, almost all floods and ground movements) flattens the whole curve. After the peak, the level returns to normal, so it is not a real drop in disasters. Drought and clay shrink-swell have progressed clearly since 2000, with peaks in 2003, 2018 and 2022. The grey zone shows that the most recent years are mechanically undercounted because of the recognition delay.
 
 ---
 
-## Section 6 — Conclusions & Implications
+## Section 3: Deep Dives
 
-**Titre-insight :** *« Les reconnaissances augmentent — agir maintenant, c'est protéger demain »*
+**Insight title:** *"The map reveals marked territorial inequalities: some departments accumulate every risk."*
 
-**Question :** Que retenir ? Que faire ?
+**Question:** Where are the most exposed territories? How does risk change over time and space?
 
-**Contenu :**
-1. 4 insights principaux (inondations, sécheresse, délai, récurrence)
-2. Implications par public (élu, citoyen, décideur)
-3. Mises en garde (pas de causalité climatique directe)
-4. Pistes d'extension (population INSEE, données météo, CCR)
-5. Tableau sources & licences
+### A. Animated map (slider 1982–2025)
+- Visual: animated choropleth by department.
+- Toggle: raw count / share of communes affected.
+- Note: overseas departments (DROM) are not shown on the map because matching boundaries are unavailable in the geographic dataset; their records remain in the other charts.
+
+### B. Top / bottom N ranking
+- Visual: horizontal bars.
+- Tabs: raw count / normalised by number of communes.
+- Why: large departments have more communes, so raw counts are not a fair comparison.
+
+### C. Recognition delay by decade
+- Visual: box plots.
+- Message: the median delay between the end of an episode and its decree grows over time, which explains the undercounting of recent years.
+
+### D. Seasonality
+- Visual: grouped bars, month × risk family.
+- Message: risk families peak in different seasons.
+
+**Active filters:** All.
 
 ---
 
-## Arbre de filtres (sidebar)
+## Section 4: By Commune
 
-| Contrôle | Type | Impact |
-|----------|------|--------|
-| Période (années) | Slider double | Toutes les sections |
-| Région(s) | Multi-select | Toutes sauf Intro et Qualité |
-| Famille de risque | Multi-select | Toutes sauf Intro et Qualité |
-| Inclure DROM | Checkbox | Tous graphiques non-cartographiques |
+**Insight title:** *"Every commune has its own history: find yours."*
+
+**Question:** What is the historical risk of my commune?
+
+**Visuals:**
+1. Search by name or INSEE code.
+2. Timeline of recognised episodes.
+3. Bars by risk family.
+4. Comparison with the department median.
+
+**Active filters:** None (search runs on the full dataset).
+
+**KPIs:** number of decrees, dominant family, rank within the department, first recognition.
+
+---
+
+## Section 5: Data Quality
+
+**Insight title:** *"Solid data overall, but important limits to know."*
+
+**Question:** Can we trust this data? What precautions should we take?
+
+**Content:**
+- Missing values per column (several columns are almost empty and are not used in the story).
+- Suspected duplicates: rows sharing the same commune, type and dates. They are kept and flagged, because identical dates and locations do not prove an accidental copy.
+- Date inconsistencies (decree date earlier than the end date of the episode).
+- Recognition delay by decade.
+- The 1999 and 1982–83 peaks.
+- Changes in the scope of the scheme over time.
+- Missing context: population, financial losses, casualties, physical intensity.
+
+---
+
+## Section 6: Conclusions and Implications
+
+**Insight title:** *"Recognitions are increasing for some risks: acting where the same communes are hit again and again protects tomorrow."*
+
+**Question:** What should we remember? What should we do?
+
+**Content:**
+1. Main insights: floods, drought, recognition delay, recurrence.
+2. Implications by audience: local official, citizen, decision-maker.
+3. Warnings: no direct climate causality is claimed.
+4. Extension ideas: INSEE population data, climate and weather data, other risk datasets.
+5. Sources and licences table.
+
+---
+
+## Sidebar Filter Tree
+
+| Control | Type | Impact |
+|---|---|---|
+| Period (years) | Range slider | All sections |
+| Region(s) | Multi-select | All except Introduction and Data Quality |
+| Risk family | Multi-select | All except Introduction and Data Quality |
+| Include DROM | Checkbox | All non-map charts |
+
+---
+
+## Sources
+
+- Arrêtés de catastrophe naturelle par commune, data.gouv.fr: https://www.data.gouv.fr/datasets/arretes-de-catastrophe-naturelle-par-commune
+- Contours administratifs, data.gouv.fr: https://www.data.gouv.fr/datasets/contours-administratifs
+- Licences: Open Licence 2.0 (Etalab) for the CatNat dataset; ODbL for administrative boundaries.
