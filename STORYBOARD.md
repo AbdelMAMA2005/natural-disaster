@@ -15,7 +15,7 @@ Author: Abdel MAMA
 
 ## Section 1: Introduction (Hook and Context)
 
-**Insight title:** *"34,598 French communes have been recognised as hit by a natural disaster at least once since 1982, but some territories pile up episodes."*
+**Insight title:** *"34,598 municipalities have at least one declaration in the dataset, but some territories pile up episodes."*
 
 **Question answered:** Why look at this data? What is a CatNat decree?
 
@@ -64,14 +64,14 @@ The 1999 peak (about 57,900 rows, almost all floods and ground movements) flatte
 **Question:** Where are the most exposed territories? How does risk change over time and space?
 
 ### A. Animated map (slider 1982–2025)
-- Visual: animated choropleth by department.
-- Toggle: raw count / share of communes affected.
+- Visual: animated choropleth of raw declaration counts by department.
+- Caveat: counts are not normalized by population or the total number of municipalities.
 - Note: overseas departments (DROM) are not shown on the map because matching boundaries are unavailable in the geographic dataset; their records remain in the other charts.
 
 ### B. Top / bottom N ranking
 - Visual: horizontal bars.
-- Tabs: raw count / normalised by number of communes.
-- Why: large departments have more communes, so raw counts are not a fair comparison.
+- Visual: ranking by raw declaration counts.
+- Caveat: large departments may have higher counts because they contain more municipalities; a fair rate comparison needs an independent municipality or population denominator.
 
 ### C. Recognition delay by decade
 - Visual: box plots.
@@ -139,10 +139,12 @@ The 1999 peak (about 57,900 rows, almost all floods and ground movements) flatte
 
 | Control | Type | Impact |
 |---|---|---|
-| Period (years) | Range slider | All sections |
-| Region(s) | Multi-select | All except Introduction and Data Quality |
-| Risk family | Multi-select | All except Introduction and Data Quality |
-| Include DROM | Checkbox | All non-map charts |
+| Period (years) | Range slider | Overview, Territorial analysis, and Conclusions |
+| Region(s) | Multi-select | Overview, Territorial analysis, and Conclusions |
+| Risk family | Multi-select | Overview, Territorial analysis, and Conclusions |
+| Include DROM | Checkbox | Filtered sections; DROM are not displayed on the map |
+
+Introduction, By Commune, and Data Quality use the full dataset and are not affected by the sidebar filters.
 
 ---
 

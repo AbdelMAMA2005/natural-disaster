@@ -53,8 +53,7 @@ def render(df: pd.DataFrame) -> None:
         ### Why does this question matter?
 
         France has recorded a large number of natural-disaster declarations. Since the compensation
-        scheme began in 1982, more than **99% of municipalities in mainland France and its overseas
-        territories have been covered by at least one declaration**.
+        scheme began in 1982, **34,598 municipalities have at least one declaration in this dataset**.
 
         This dashboard provides a clear way to explore that administrative record, compare places,
         and understand where declarations recur. The figures describe recognized claims, not a direct

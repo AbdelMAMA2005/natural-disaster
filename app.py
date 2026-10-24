@@ -258,7 +258,8 @@ except Exception as e:
 with st.sidebar:
     st.title("Explore the data")
     st.caption(
-        "Filters apply across the dashboard. Clear selections to return to the full view."
+        "Period, region, and risk-family filters apply to Overview, Territorial analysis, "
+        "and Conclusions. Introduction, By municipality, and Data quality use the full dataset."
     )
 
     section = st.radio(

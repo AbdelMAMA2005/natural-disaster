@@ -122,19 +122,10 @@ def agg_par_annee_famille(df: pd.DataFrame) -> pd.DataFrame:
 def agg_par_dept(df: pd.DataFrame) -> pd.DataFrame:
     """
     Statistiques par département :
-    - nb_arretes brut
-    - nb_communes_touchees (communes distinctes ayant au moins 1 arrêté)
-    - nb_communes_total (communes distinctes dans le CSV pour ce dept)
-    - pct_communes (nb_communes_touchees / nb_communes_total * 100)
+    - nb_arretes : nombre de déclarations enregistrées
+    - nb_communes_touchees : communes distinctes ayant au moins une déclaration
     - famille_dominante
     """
-    # Nombre total de communes distinctes par département (référence de normalisation)
-    ref_communes = (
-        df.groupby("departement")["code_geographique"]
-        .nunique()
-        .reset_index(name="nb_communes_total")
-    )
-
     agg = (
         df.groupby(["departement", "libelle_departement"], dropna=True)
         .agg(
@@ -143,11 +134,6 @@ def agg_par_dept(df: pd.DataFrame) -> pd.DataFrame:
         )
         .reset_index()
     )
-
-    agg = agg.merge(ref_communes, on="departement", how="left")
-    agg["pct_communes"] = (
-        agg["nb_communes_touchees"] / agg["nb_communes_total"] * 100
-    ).round(1)
 
     # Famille dominante par département
     fam_dom = (

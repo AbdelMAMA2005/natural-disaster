@@ -94,7 +94,6 @@ PALETTE_CAT: dict[str, str] = {
 }
 
 PALETTE_SEQ = "Blues"           # choroplèthe valeur brute
-PALETTE_SEQ_NORMALIZED = "YlOrRd"  # choroplèthe normalisée (% communes)
 
 # ── Mapping codes région INSEE → libellé ─────────────────────────────────────
 # Source : code.travail.gouv.fr / INSEE — 18 régions métropole + DROM

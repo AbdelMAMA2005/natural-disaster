@@ -51,20 +51,18 @@ def render(df: pd.DataFrame, geojson: dict) -> None:
 
     # ── SECTION A — Carte ────────────────────────────────────────────────────────
     st.subheader("Department map")
-    mode = st.radio("Map measure", ["Total declarations", "Municipalities affected (%)"], horizontal=True)
-    colonne = "nb_arretes" if mode == "Total declarations" else "pct_communes"
-    titre_leg = "Declarations" if colonne == "nb_arretes" else "Municipalities affected (%)"
 
     agg_dept = agg_par_dept(df)
     agg_dept_an = agg_par_dept_annee(df)
 
-    st.info("Use the animation controls to explore how declarations changed from 1982 to 2025.")
+    st.info(
+        "Use the animation controls to explore declaration counts from 1982 to 2025. "
+        "Counts are not adjusted for department population or number of municipalities."
+    )
     fig_anim = fig_carte_animee(
         agg_dept_an,
         agg_dept,
         geojson,
-        colonne=colonne if colonne == "nb_arretes" else "nb_arretes",
-        titre_legende=titre_leg,
     )
     st.plotly_chart(fig_anim, use_container_width=True)
     st.caption("Department-level map for mainland France and Corsica. Source: GASPAR and data.gouv.fr.")
@@ -73,45 +71,29 @@ def render(df: pd.DataFrame, geojson: dict) -> None:
     # ── SECTION B — Classement ───────────────────────────────────────────────────
     st.subheader("Department rankings")
     n_top = st.slider("Departments to show", 5, 30, 15)
-    ranking_mode = st.radio(
-        "Rank by",
-        ["Total declarations", "Municipalities affected (%)"],
-        horizontal=True,
-        key="department_ranking_measure",
-    )
-    ranking_column = "nb_arretes" if ranking_mode == "Total declarations" else "pct_communes"
-    top_departments = agg_dept.nlargest(n_top, ranking_column)[["libelle_departement", ranking_column]].copy()
+    top_departments = agg_dept.nlargest(n_top, "nb_arretes")[
+        ["libelle_departement", "nb_arretes"]
+    ].copy()
     top_departments = top_departments.rename(columns={
         "libelle_departement": "Department",
-        ranking_column: "Declarations" if ranking_column == "nb_arretes" else "Municipalities affected (%)",
+        "nb_arretes": "Declarations",
     })
-    if ranking_column == "nb_arretes":
-        st.dataframe(
-            top_departments,
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "Department": st.column_config.TextColumn("Department"),
-                "Declarations": st.column_config.ProgressColumn(
-                    "Declarations", format="%d", min_value=0,
-                    max_value=max(1, int(top_departments["Declarations"].max())),
-                ),
-            },
-        )
-        st.caption("Raw totals are influenced by department size.")
-    else:
-        st.dataframe(
-            top_departments,
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "Department": st.column_config.TextColumn("Department"),
-                "Municipalities affected (%)": st.column_config.ProgressColumn(
-                    "Municipalities affected", format="%.1f%%", min_value=0, max_value=100,
-                ),
-            },
-        )
-        st.caption("Rates account for the number of municipalities in each department; some smaller departments approach full coverage.")
+    st.dataframe(
+        top_departments,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Department": st.column_config.TextColumn("Department"),
+            "Declarations": st.column_config.ProgressColumn(
+                "Declarations", format="%d", min_value=0,
+                max_value=max(1, int(top_departments["Declarations"].max())),
+            ),
+        },
+    )
+    st.caption(
+        "These are raw totals, not rates. Departments with more municipalities may rank higher; "
+        "a fair rate comparison requires an independent municipality or population denominator."
+    )
 
     # ── SECTION C — Délai ────────────────────────────────────────────────────────
     st.subheader("Recognition delays are increasing")

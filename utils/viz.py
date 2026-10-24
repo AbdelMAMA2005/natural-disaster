@@ -19,7 +19,7 @@ from plotly.subplots import make_subplots
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from constants import (
-    PALETTE_CAT, PALETTE_SEQ, PALETTE_SEQ_NORMALIZED,
+    PALETTE_CAT, PALETTE_SEQ,
     FAMILY_LABELS_EN, TYPE_LABELS_EN, FAMILLES_ORDER,
     ANNEES_REMARQUABLES, ANNEES_INCOMPLETES_DEBUT,
 )
@@ -176,23 +176,22 @@ def fig_carte_dept(
     agg_dept: pd.DataFrame,
     geojson: dict,
     colonne: str = "nb_arretes",
-    titre_legende: str = "Arrêtés",
+    titre_legende: str = "Declarations",
     annee_label: str = "",
 ) -> go.Figure:
     """
     Carte choroplèthe des départements (métropole + Corse).
 
     Paramètres :
-        agg_dept       : DataFrame avec colonnes departement, nb_arretes, pct_communes…
+        agg_dept       : DataFrame with department declaration counts and leading risk family
         geojson        : GeoJSON chargé par io.load_geojson()
-        colonne        : colonne à visualiser ('nb_arretes' ou 'pct_communes')
+        colonne        : column to visualize; currently only 'nb_arretes' is supported
         titre_legende  : légende de l'échelle de couleur
         annee_label    : affichée dans le titre si fournie
     """
-    palette = PALETTE_SEQ if colonne == "nb_arretes" else PALETTE_SEQ_NORMALIZED
+    if colonne != "nb_arretes":
+        raise ValueError("Department maps currently support declaration counts only.")
 
-    hover_col  = "nb_arretes"  if colonne == "nb_arretes" else "pct_communes"
-    hover_unit = "declarations" if colonne == "nb_arretes" else "municipalities affected (%)"
     display_data = agg_dept.copy()
     display_data["famille_dominante"] = display_data["famille_dominante"].map(FAMILY_LABELS_EN).fillna(display_data["famille_dominante"])
 
@@ -202,20 +201,20 @@ def fig_carte_dept(
         locations="departement",
         featureidkey="properties.code",
         color=colonne,
-        color_continuous_scale=palette,
+        color_continuous_scale=PALETTE_SEQ,
         map_style="carto-positron",
         center={"lat": 46.6, "lon": 2.5},
         zoom=4.3,
         hover_name="libelle_departement",
         hover_data={
             "departement": True,
-            hover_col: True,
+            "nb_arretes": True,
             "famille_dominante": True,
         },
         labels={
             colonne: titre_legende,
             "departement": "Department code",
-            hover_col: hover_unit.capitalize(),
+            "nb_arretes": "Declarations",
             "famille_dominante": "Leading risk family",
         },
     )
@@ -250,9 +249,9 @@ def fig_carte_animee(
         geojson        : GeoJSON chargé
         colonne        : 'nb_arretes'
     """
-    # Joindre pct_communes pour l'infobulle
+    # Join department-level context for the hover labels.
     agg = agg_dept_annee.merge(
-        agg_dept_ref[["departement", "pct_communes", "famille_dominante"]],
+        agg_dept_ref[["departement", "famille_dominante"]],
         on="departement", how="left",
     )
     agg["annee_str"] = agg["annee"].astype(str)

@@ -8,7 +8,7 @@ An interactive Streamlit dashboard about natural-disaster declarations ("arrêt�
 
 ## Overview
 
-This project uses the GASPAR database, which records municipalities that were officially recognized as affected by a natural disaster. The dashboard covers 1982 to mid-2025 and helps readers explore the history of these declarations.
+This project uses the GASPAR database, which records municipalities that were officially recognized as affected by a natural disaster. The dashboard covers 1982–2025 and helps readers explore the history of these declarations.
 
 The central question is: **which communes and territories are the most exposed to natural-disaster declarations, and is it getting worse?**
 
@@ -28,7 +28,7 @@ A profile photo can be added at `assets/<fichier>.jpg`. The application displays
 |---|---|
 | **Introduction** | What the CatNat scheme and GASPAR represent, a national snapshot, and the main cautions. One administrative declaration is not one physical disaster event. |
 | **Overview** | Changes over time: annual total, a year × risk-family matrix, separate trends per risk family, and a regional comparison. Recent years may be incomplete because declarations take time to be reviewed and published. |
-| **Territorial analysis** | A department map, a ranking, recognition delays, and seasonal patterns. The ranking can show total declarations or the share of municipalities affected, which makes departments of different sizes more comparable. |
+| **Territorial analysis** | A department map and ranking of raw declaration counts, recognition delays, and seasonal patterns. Counts are not adjusted for population or department size. |
 | **By municipality** | Search by municipality name or INSEE code: declaration history, leading risk family, rank within the department, and a table of recorded declarations. |
 | **Data quality** | Missing values, possible duplicates, date inconsistencies, and other limits of the source. |
 | **Conclusions** | Main patterns and suggested uses for residents, local officials, and decision-makers. These are starting points, not predictions or proof of climate causation. |
@@ -51,12 +51,14 @@ Columns: `index`, `code_geographique`, `libelle_geographique`, `epci`, `libelle_
 
 The raw CSV is **not** included in the repository. The app downloads it and keeps a local cache (`data/`).
 
+Period, region, and risk-family filters apply to the Overview, Territorial analysis, and Conclusions sections. Introduction, By municipality, and Data quality always use the full dataset.
+
 ## Data preparation
 
 - The CSV is read with explicit column names and as text, so INSEE and department codes keep their leading zeros (for example `04054`, `2A`).
 - Dates are converted and rounded to the day (some carry a `02:00` time offset).
 - Risk types are grouped into families: floods, drought (including clay shrink-swell), ground movements, storms and cyclones, hail and snow, and others (avalanche, miscellaneous).
-- Derived variables: start year, month and decade, episode duration, recognition delay (decree date minus end date), decrees per commune, share of communes affected per department.
+- Derived variables: start year, month and decade, episode duration, recognition delay (decree date minus end date), and declaration counts by commune and department.
 - Aggregated tables are pre-computed and cached with `st.cache_data`.
 
 ## Key limits and caveats
@@ -84,6 +86,7 @@ utils/
   io.py                 # data download, checksums, and local cache
   prep.py               # cleaning, derived fields, filters, and aggregations
   viz.py                # shared Plotly charts
+tests/                  # focused checks for data preparation
 data/                   # downloaded CSV and GeoJSON cache (not versioned)
 assets/                 # banners and other images
 .streamlit/config.toml  # Streamlit theme and server settings
@@ -106,6 +109,12 @@ python -m streamlit run app.py
 ```
 
 If PowerShell blocks virtual-environment activation, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in that terminal and activate again. On first launch, the app downloads the CSV and department boundaries into `data/`, then reuses the local cache. An internet connection is required for the first download.
+
+Run the focused data-preparation tests with:
+
+```powershell
+python -m unittest discover -s tests -v
+```
 
 ## Tech stack
 
